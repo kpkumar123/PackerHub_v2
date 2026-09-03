@@ -175,5 +175,3 @@
 /karnataka/:city  /karnataka/:city/  301
 /kerala/:city  /kerala/:city/  301
 
-# Fallback for 404
-/* /404.html 404
