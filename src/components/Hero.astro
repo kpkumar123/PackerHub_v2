@@ -86,17 +86,17 @@ const { title, subtitle, cityName, stateName, showStats = true } = Astro.props;
 
         <!-- Stats Row -->
         {showStats && (
-          <div class="flex flex-wrap gap-6">
+          <div class="grid grid-cols-4 gap-2 sm:gap-4 w-full max-w-lg mt-2">
             {[
               { num: '100+', label: 'Cities Served', icon: '📍' },
               { num: '5', label: 'States Covered', icon: '🚚' },
               { num: '100%', label: 'Insured Moves', icon: '🛡️' },
-              { num: '24/7', label: 'Online', icon: '🔔' },
+              { num: '24/7', label: 'Support', icon: '🔔' },
             ].map(s => (
-              <div class="text-center">
-                <div class="text-xl">{s.icon}</div>
-                <div class="font-display font-black text-2xl text-brand-dark stat-number">{s.num}</div>
-                <div class="text-xs text-brand-grey font-medium">{s.label}</div>
+              <div class="text-center flex flex-col items-center">
+                <div class="text-base sm:text-lg mb-0.5">{s.icon}</div>
+                <div class="font-display font-black text-lg sm:text-xl text-brand-dark stat-number leading-none">{s.num}</div>
+                <div class="text-[9px] sm:text-[10px] uppercase tracking-wider text-brand-grey font-bold mt-1">{s.label}</div>
               </div>
             ))}
           </div>
