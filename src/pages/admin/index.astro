@@ -1,0 +1,169 @@
+---
+// PackersHub Staff Operations Hub — /admin/
+// Internal management dashboard for PackersHub operations staff.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout
+  title="Staff Operations Hub — PackersHub Admin"
+  description="Internal portal for PackersHub operations, logistics, SEO ops, and integration management."
+  noindex={true}
+>
+  <section class="py-16 bg-gradient-to-b from-stone-50 via-white to-stone-50 min-h-screen">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <!-- Header -->
+      <div class="mb-10 text-center sm:text-left">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100 text-brand-orange text-xs font-bold uppercase tracking-wider mb-3">
+          🔒 Internal Operations Portal
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-display font-extrabold text-brand-dark mb-3">
+          PackersHub Control Center
+        </h1>
+        <p class="text-brand-grey text-base max-w-2xl">
+          Quick access to customer booking workflows, live GPS dispatch tracking, SEO operations, Google Indexing pings, and infrastructure health.
+        </p>
+      </div>
+
+      <!-- Quick Staff Token Status Box -->
+      <div class="bg-white rounded-2xl shadow-sm border border-stone-200 p-6 mb-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-sm font-bold text-brand-dark uppercase tracking-wide">Device Authentication Status</h2>
+            <p class="text-xs text-brand-grey mt-0.5" id="token-status-text">Checking saved staff token...</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <input
+              type="password"
+              id="global-admin-token"
+              placeholder="Enter Staff Token"
+              class="px-3.5 py-2 text-sm rounded-xl border border-stone-300 focus:outline-none focus:border-brand-orange w-48"
+            />
+            <button
+              id="save-global-token"
+              type="button"
+              class="px-4 py-2 text-sm font-bold rounded-xl bg-brand-dark text-white hover:bg-stone-800 transition-colors"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Navigation Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <!-- Orders & Logistics -->
+        <a
+          href="/admin/orders/"
+          class="group block bg-white rounded-2xl p-6 border border-stone-200 shadow-sm hover:shadow-md hover:border-brand-orange/50 transition-all duration-200"
+        >
+          <div class="w-12 h-12 rounded-xl bg-orange-50 text-brand-orange flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+            📦
+          </div>
+          <h3 class="font-display font-bold text-lg text-brand-dark group-hover:text-brand-orange transition-colors mb-2 flex items-center justify-between">
+            <span>Orders & Dispatch</span>
+            <span class="text-stone-400 group-hover:translate-x-1 transition-transform">→</span>
+          </h3>
+          <p class="text-sm text-brand-grey leading-relaxed">
+            Update customer move stages (Booked, Dispatch, In Transit, Delivered), verify Razorpay payment captures, and manage driver GPS coordinates.
+          </p>
+        </a>
+
+        <!-- SEO Ops -->
+        <a
+          href="/admin/seo-ops/"
+          class="group block bg-white rounded-2xl p-6 border border-stone-200 shadow-sm hover:shadow-md hover:border-brand-orange/50 transition-all duration-200"
+        >
+          <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+            📈
+          </div>
+          <h3 class="font-display font-bold text-lg text-brand-dark group-hover:text-brand-orange transition-colors mb-2 flex items-center justify-between">
+            <span>SEO Operations</span>
+            <span class="text-stone-400 group-hover:translate-x-1 transition-transform">→</span>
+          </h3>
+          <p class="text-sm text-brand-grey leading-relaxed">
+            Track organic rankings, monitor competitor backlinks, discover local directory gaps, and maintain citation records across South Indian cities.
+          </p>
+        </a>
+
+        <!-- Integrations Diagnostics -->
+        <a
+          href="/admin/integrations/"
+          class="group block bg-white rounded-2xl p-6 border border-stone-200 shadow-sm hover:shadow-md hover:border-brand-orange/50 transition-all duration-200"
+        >
+          <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+            ⚡
+          </div>
+          <h3 class="font-display font-bold text-lg text-brand-dark group-hover:text-brand-orange transition-colors mb-2 flex items-center justify-between">
+            <span>Integrations & Secrets</span>
+            <span class="text-stone-400 group-hover:translate-x-1 transition-transform">→</span>
+          </h3>
+          <p class="text-sm text-brand-grey leading-relaxed">
+            Verify Cloudflare KV namespaces, Anthropic AI assistant keys, Razorpay webhooks, Exotel/Twilio voice gateways, and notification triggers.
+          </p>
+        </a>
+
+        <!-- Google Indexing API -->
+        <a
+          href="/admin/index-ping/"
+          class="group block bg-white rounded-2xl p-6 border border-stone-200 shadow-sm hover:shadow-md hover:border-brand-orange/50 transition-all duration-200"
+        >
+          <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+            🚀
+          </div>
+          <h3 class="font-display font-bold text-lg text-brand-dark group-hover:text-brand-orange transition-colors mb-2 flex items-center justify-between">
+            <span>Google Indexing Ping</span>
+            <span class="text-stone-400 group-hover:translate-x-1 transition-transform">→</span>
+          </h3>
+          <p class="text-sm text-brand-grey leading-relaxed">
+            Trigger Google Indexing API pings for newly generated or updated city landing pages, service guides, and blog content across South India.
+          </p>
+        </a>
+      </div>
+
+      <!-- Back to site -->
+      <div class="mt-12 text-center">
+        <a href="/" class="text-sm text-brand-grey hover:text-brand-orange font-semibold transition-colors">
+          ← Return to PackersHub Public Site
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      const STORAGE_KEY = 'ph_admin_token';
+      const tokenInput = document.getElementById('global-admin-token');
+      const saveBtn = document.getElementById('save-global-token');
+      const statusText = document.getElementById('token-status-text');
+
+      function updateStatus() {
+        const token = localStorage.getItem(STORAGE_KEY);
+        if (token) {
+          if (tokenInput) tokenInput.value = token;
+          if (statusText) {
+            statusText.textContent = 'Token saved on this device (authenticated)';
+            statusText.className = 'text-xs text-emerald-600 font-semibold mt-0.5';
+          }
+        } else {
+          if (statusText) {
+            statusText.textContent = 'No token saved. Enter staff token to access protected tools.';
+            statusText.className = 'text-xs text-amber-600 font-medium mt-0.5';
+          }
+        }
+      }
+
+      if (saveBtn && tokenInput) {
+        saveBtn.addEventListener('click', function () {
+          const val = tokenInput.value.trim();
+          if (val) {
+            localStorage.setItem(STORAGE_KEY, val);
+          } else {
+            localStorage.removeItem(STORAGE_KEY);
+          }
+          updateStatus();
+        });
+      }
+
+      updateStatus();
+    })();
+  </script>
+</BaseLayout>

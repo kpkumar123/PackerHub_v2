@@ -161,8 +161,28 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    optimizeDeps: {
+      exclude: [
+        'astro/content/runtime',
+        'astro/app/manifest',
+        'astro:assets',
+        'astro:content',
+        'astro/assets/services/noop',
+        'astro/assets/services/sharp',
+      ]
+    },
     ssr: {
-      optimizeDeps: { disabled: true }
+      optimizeDeps: {
+        exclude: [
+          'astro/content/runtime',
+          'astro/app/manifest',
+          'astro:assets',
+          'astro:content',
+          'astro/assets/services/noop',
+          'astro/assets/services/sharp',
+        ]
+      },
+      noExternal: [],
     },
     build: {
       cssCodeSplit: true,

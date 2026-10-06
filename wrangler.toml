@@ -2,7 +2,6 @@
 name = "packershub"
 compatibility_date = "2026-06-28"
 compatibility_flags = ["nodejs_compat"]
-pages_build_output_dir = "dist"
 
 [placement]
 mode = "smart"
@@ -46,6 +45,3 @@ SITE_URL = "https://www.packershub.in"
 #   wrangler pages secret put CRON_SECRET --project-name=packershub
 # Every integration no-ops gracefully if its secret is unset, so partial
 # setup is fine — only configure what you're actually using.
-
-[assets]
-binding = "MY_ASSETS"

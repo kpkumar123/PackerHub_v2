@@ -2,6 +2,17 @@ import { env } from 'cloudflare:workers';
 
 export const prerender = false;
 
+export async function GET() {
+  return new Response(
+    JSON.stringify({
+      status: "ok",
+      service: "PackersHub AI Chat Assistant",
+      message: "Send POST requests with messages to interact with AI assistant."
+    }),
+    { status: 200, headers: { 'Content-Type': 'application/json' } }
+  );
+}
+
 export async function POST({ request }: { request: Request }) {
   try {
     const { messages, system } = await request.json();

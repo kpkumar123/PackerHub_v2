@@ -1,24 +1,145 @@
 ---
+// PackersHub — 404 Not Found Page
+// Premium, helpful error recovery page with quick route navigation,
+// emergency support, and relocation hub links.
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const topCities = [
+  { name: 'Bengaluru', url: '/karnataka/bangalore/' },
+  { name: 'Hyderabad', url: '/telangana/hyderabad/' },
+  { name: 'Chennai', url: '/tamil-nadu/chennai/' },
+  { name: 'Kochi', url: '/kerala/kochi/' },
+  { name: 'Visakhapatnam', url: '/andhra-pradesh/visakhapatnam/' },
+  { name: 'Vijayawada', url: '/andhra-pradesh/vijayawada/' },
+  { name: 'Coimbatore', url: '/tamil-nadu/coimbatore/' },
+  { name: 'Mysuru', url: '/karnataka/mysore/' }
+];
+
+const popularServices = [
+  { title: 'Home Shifting', url: '/home-shifting-services/', icon: '🏠' },
+  { title: 'Vehicle Transport', url: '/vehicle-transport/', icon: '🚗' },
+  { title: 'Office Relocation', url: '/office-relocation-services/', icon: '🏢' },
+  { title: 'Storage & Warehouse', url: '/storage-warehousing/', icon: '📦' }
+];
 ---
 <BaseLayout
-  title="Page Not Found — PackersHub"
-  description="The page you're looking for doesn't exist. Return to PackersHub homepage."
+  title="404 — Page Not Found | PackersHub"
+  description="The page you are looking for has been relocated or does not exist. Explore PackersHub 100 cities and relocation services across South India."
 >
-  <section class="min-h-[70vh] hero-bg flex items-center justify-center py-20">
-    <div class="max-w-lg mx-auto px-4 text-center">
-      <div class="text-8xl mb-6" aria-hidden="true">🚚</div>
-      <h1 class="font-display font-extrabold text-6xl text-brand-dark mb-4">404</h1>
-      <p class="text-2xl font-bold text-brand-dark mb-3">Oops! Page not found</p>
-      <p class="text-brand-grey mb-8">Looks like this page moved — just like your belongings during a relocation! Let's get you back on track.</p>
-      <div class="flex flex-col sm:flex-row gap-3 justify-center">
-        <a href="/" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-brand-orange to-brand-gold text-white font-bold btn-shine">
-          🏠 Go Home
+  <main class="min-h-[85vh] bg-gradient-to-b from-orange-50/70 via-white to-stone-50 flex items-center py-16 px-4">
+    <div class="max-w-3xl mx-auto w-full text-center">
+      <!-- Animated badge -->
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-100/80 border border-orange-200 text-brand-orange text-xs font-bold uppercase tracking-widest mb-6 animate-pulse">
+        <span>⚠️ Destination Relocated</span>
+      </div>
+
+      <!-- Hero Visual -->
+      <div class="relative inline-block mb-6">
+        <span class="text-7xl sm:text-8xl select-none inline-block transform hover:scale-110 transition-transform duration-300">
+          🚚
+        </span>
+        <div class="absolute -top-2 -right-4 bg-gradient-to-r from-brand-orange to-brand-gold text-white text-xs font-extrabold px-3 py-1 rounded-full shadow-md">
+          404
+        </div>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-display font-extrabold text-brand-dark tracking-tight mb-4">
+        We Couldn't Find That Address
+      </h1>
+
+      <p class="text-base sm:text-lg text-brand-grey max-w-xl mx-auto mb-8 leading-relaxed">
+        Just like a box that got loaded onto the wrong truck, this page seems to have moved or doesn't exist anymore. Let's get you back on route.
+      </p>
+
+      <!-- Primary CTA Action Buttons -->
+      <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-12">
+        <a
+          href="/"
+          class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-gradient-to-r from-brand-orange to-brand-gold text-white font-bold shadow-lg shadow-orange-500/20 hover:shadow-orange-500/35 hover:-translate-y-0.5 transition-all"
+        >
+          <span>🏠</span>
+          <span>Return Home</span>
         </a>
-        <a href="tel:+917731074075" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full border-2 border-brand-orange/30 text-brand-dark font-bold hover:border-brand-orange transition-colors">
-          📞 Call Us
+        <a
+          href="/booking/"
+          class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-brand-dark text-white font-bold hover:bg-stone-800 hover:-translate-y-0.5 transition-all"
+        >
+          <span>⚡</span>
+          <span>Get Instant Quote</span>
+        </a>
+        <a
+          href="/track/"
+          class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border-2 border-stone-200 text-brand-dark font-bold hover:border-brand-orange hover:text-brand-orange hover:-translate-y-0.5 transition-all"
+        >
+          <span>📍</span>
+          <span>Track Move</span>
         </a>
       </div>
+
+      <!-- Popular Services Quick Cards -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-stone-200 text-left mb-8">
+        <h2 class="text-sm font-bold text-brand-dark uppercase tracking-wider mb-4 text-center sm:text-left">
+          Popular Relocation Services
+        </h2>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+          {popularServices.map(service => (
+            <a
+              href={service.url}
+              class="group flex flex-col items-center sm:items-start p-3.5 rounded-2xl bg-stone-50 border border-stone-100 hover:border-brand-orange/40 hover:bg-orange-50/50 transition-all text-center sm:text-left"
+            >
+              <span class="text-2xl mb-1.5 group-hover:scale-110 transition-transform">{service.icon}</span>
+              <span class="text-sm font-bold text-brand-dark group-hover:text-brand-orange transition-colors">
+                {service.title}
+              </span>
+            </a>
+          ))}
+        </div>
+
+        <!-- Quick City Links -->
+        <div class="mt-6 pt-6 border-t border-stone-100">
+          <h2 class="text-xs font-bold text-stone-500 uppercase tracking-wider mb-3 text-center sm:text-left">
+            Major South India Hubs
+          </h2>
+          <div class="flex flex-wrap justify-center sm:justify-start gap-2">
+            {topCities.map(city => (
+              <a
+                href={city.url}
+                class="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-orange-100 text-brand-dark hover:text-brand-orange text-xs font-semibold transition-colors"
+              >
+                {city.name}
+              </a>
+            ))}
+            <a
+              href="/services/"
+              class="px-3 py-1.5 rounded-xl bg-orange-50 hover:bg-orange-100 text-brand-orange text-xs font-bold transition-colors"
+            >
+              All 100 Cities →
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Immediate Contact Strip -->
+      <div class="flex flex-wrap items-center justify-center gap-6 text-sm text-brand-grey">
+        <div class="flex items-center gap-2">
+          <span>Need immediate assistance?</span>
+          <a href="tel:+917731074075" class="font-bold text-brand-dark hover:text-brand-orange transition-colors">
+            📞 +91 77310 74075
+          </a>
+        </div>
+        <span class="hidden sm:inline text-stone-300">•</span>
+        <div>
+          <a
+            href="https://wa.me/917731074075?text=Hi%20PackersHub,%20I%20need%20help%20with%20my%20move"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="font-bold text-[#25D366] hover:underline inline-flex items-center gap-1.5"
+          >
+            <span>💬</span> Chat on WhatsApp
+          </a>
+        </div>
+      </div>
     </div>
-  </section>
+  </main>
 </BaseLayout>

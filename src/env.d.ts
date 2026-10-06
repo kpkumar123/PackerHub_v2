@@ -1,6 +1,10 @@
 /// <reference path="../.astro/types.d.ts" />
 /// <reference types="astro/client" />
 
+declare module 'cloudflare:workers' {
+  export const env: Cloudflare.Env;
+}
+
 // PackersHub v10.1 — Astro 7.0.3 + @astrojs/cloudflare v13
 //
 // v13 removed `Astro.locals.runtime` entirely. Environment bindings are now

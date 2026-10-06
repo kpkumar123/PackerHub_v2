@@ -1,29 +1,350 @@
-# ── www canonicalization — ACTION NEEDED IN CLOUDFLARE DASHBOARD ──────────
-# astro.config.mjs (site:) and every SEO schema/sitemap in this codebase
-# treat https://www.packershub.in as the one canonical domain (fixed in
-# v10.7.13 — SITE_URL and the AI voice agent's hardcoded URLs were pointing
-# at the non-www form, which didn't match). This _redirects file is
-# PATH-based only — Cloudflare Pages cannot condition a rule on hostname
-# here, so a non-www -> www redirect cannot be added in this file.
-# One-time manual step: Cloudflare dashboard -> your zone (packershub.in) ->
-# Rules -> Redirect Rules -> create a rule matching hostname = packershub.in
-# (no www) -> redirect to https://www.packershub.in/${path} (301, preserve
-# query string). Without this, Google can index both packershub.in and
-# www.packershub.in as separate, competing pages.
+# ── PackersHub Canonical & Legacy URL Redirects ──────────────────────────────
+# All 301 Permanent Redirects for legacy links, alternate city names, state typos,
+# and URL canonicalization. Specific/exact rules are placed first for optimal matching.
 
-# Home root redirect (existing)
-/home / 301
+# ── 1. Core Static Page Slash Canonicalization ───────────────────────────────
+/home  /  301
+/about  /about/  301
+/services  /services/  301
+/vehicle-transport  /vehicle-transport/  301
+/storage-warehousing  /storage-warehousing/  301
+/booking  /booking/  301
+/track  /track/  301
+/franchise  /franchise/  301
+/blog  /blog/  301
+/contact  /contact/  301
+/privacy  /privacy/  301
+/terms  /terms/  301
+/admin  /admin/  301
 
-# Module 35 URL alias — /warehouse-storage is the SEO-doc URL for the same
-# service already live and indexed at /storage-warehousing. Redirecting
-# instead of publishing a second page avoids a duplicate-content pair.
-/warehouse-storage /storage-warehousing 301
+# ── 2. State Hub Slash Canonicalization ─────────────────────────────────────
+/andhra-pradesh  /andhra-pradesh/  301
+/telangana  /telangana/  301
+/tamil-nadu  /tamil-nadu/  301
+/karnataka  /karnataka/  301
+/kerala  /kerala/  301
 
-# Legacy URL structure redirects (old Next.js build used /packers-movers-{city}/
-# new Astro build uses /{state}/{city}/ — added after a stale indexed URL
-# (packers-movers-kozhikode) was found 404ing in Google search results, with
-# an outdated phone number in the cached snippet. These 301s fix that and any
-# other legacy links pointing at the old pattern.
+# ── 3. Core Service Pages Slash Canonicalization ────────────────────────────
+/home-shifting-services  /home-shifting-services/  301
+/office-relocation-services  /office-relocation-services/  301
+/car-transportation  /car-transportation/  301
+/bike-transportation  /bike-transportation/  301
+/international-relocation  /international-relocation/  301
+/local-shifting  /local-shifting/  301
+/intercity-shifting  /intercity-shifting/  301
+/industrial-shifting  /industrial-shifting/  301
+/packing-services  /packing-services/  301
+
+# ── 4. Service & Pricing Aliases ─────────────────────────────────────────────
+/pricing  /booking/  301
+/pricing/  /booking/  301
+/warehouse-storage  /storage-warehousing/  301
+/warehouse-storage/  /storage-warehousing/  301
+/services/warehouse-storage  /storage-warehousing/  301
+/services/warehouse-storage/  /storage-warehousing/  301
+/services/storage  /storage-warehousing/  301
+/services/storage/  /storage-warehousing/  301
+/services/loading-unloading  /services/  301
+/services/loading-unloading/  /services/  301
+/services/packing-services  /packing-services/  301
+/services/packing-services/  /packing-services/  301
+/packers-movers-telangana  /telangana/  301
+/packers-movers-telangana/  /telangana/  301
+
+# ── 5. API Typo & Friendly Aliases ──────────────────────────────────────────
+/api/chal  /api/chat  301
+/api/chal/  /api/chat  301
+/apl/payment/create-order  /api/payment/create-order  301
+/apl/payment/create-order/  /api/payment/create-order  301
+
+# ── 6. Karnataka Alternate City Spellings & Aliases ──────────────────────────
+/karnataka/bengaluru  /karnataka/bangalore/  301
+/karnataka/bengaluru/  /karnataka/bangalore/  301
+/karnataka/mysuru  /karnataka/mysore/  301
+/karnataka/mysuru/  /karnataka/mysore/  301
+/karnataka/hubballi  /karnataka/hubli/  301
+/karnataka/hubballi/  /karnataka/hubli/  301
+/karnataka/mangaluru  /karnataka/mangalore/  301
+/karnataka/mangaluru/  /karnataka/mangalore/  301
+/karnataka/belagavi  /karnataka/belgaum/  301
+/karnataka/belagavi/  /karnataka/belgaum/  301
+/karnataka/kalaburagi  /karnataka/gulbarga/  301
+/karnataka/kalaburagi/  /karnataka/gulbarga/  301
+/karnataka/ballari  /karnataka/bellary/  301
+/karnataka/ballari/  /karnataka/bellary/  301
+/karnataka/bijapur  /karnataka/bijapur/  301
+/karnataka/vijayapura  /karnataka/bijapur/  301
+/karnataka/vijayapura/  /karnataka/bijapur/  301
+/karnataka/shivamogga  /karnataka/shimoga/  301
+/karnataka/shivamogga/  /karnataka/shimoga/  301
+/karnataka/tumakuru  /karnataka/tumkur/  301
+/karnataka/tumakuru/  /karnataka/tumkur/  301
+/karnataka/hosapete  /karnataka/hospet/  301
+/karnataka/hosapete/  /karnataka/hospet/  301
+/karnataka/chikkamagaluru  /karnataka/  301
+/karnataka/chikkamagaluru/  /karnataka/  301
+/karnataka/chikmagalur  /karnataka/  301
+/karnataka/chikmagalur/  /karnataka/  301
+/karnataka/madikeri  /karnataka/  301
+/karnataka/madikeri/  /karnataka/  301
+/karnataka/coorg  /karnataka/  301
+/karnataka/coorg/  /karnataka/  301
+
+# ── 7. Tamil Nadu Alternate City Spellings & Non-Featured Cities ─────────────
+/tamil-nadu/ooty  /tamil-nadu/udhagamandalam/  301
+/tamil-nadu/ooty/  /tamil-nadu/udhagamandalam/  301
+/tamil-nadu/ootacamund  /tamil-nadu/udhagamandalam/  301
+/tamil-nadu/ootacamund/  /tamil-nadu/udhagamandalam/  301
+/tamil-nadu/udhagai  /tamil-nadu/udhagamandalam/  301
+/tamil-nadu/udhagai/  /tamil-nadu/udhagamandalam/  301
+/tamil-nadu/trichy  /tamil-nadu/tiruchirappalli/  301
+/tamil-nadu/trichy/  /tamil-nadu/tiruchirappalli/  301
+/tamil-nadu/tuticorin  /tamil-nadu/thoothukudi/  301
+/tamil-nadu/tuticorin/  /tamil-nadu/thoothukudi/  301
+/tamil-nadu/krishnagiri  /tamil-nadu/  301
+/tamil-nadu/krishnagiri/  /tamil-nadu/  301
+/tamil-nadu/nagapattinam  /tamil-nadu/  301
+/tamil-nadu/nagapattinam/  /tamil-nadu/  301
+/tamil-nadu/pudukkottai  /tamil-nadu/  301
+/tamil-nadu/pudukkottai/  /tamil-nadu/  301
+/tamil-nadu/cuddalore  /tamil-nadu/  301
+/tamil-nadu/cuddalore/  /tamil-nadu/  301
+/tamil-nadu/virudhunagar  /tamil-nadu/  301
+/tamil-nadu/virudhunagar/  /tamil-nadu/  301
+
+# ── 8. Telangana Alternate City Spellings & Non-Featured Cities ──────────────
+/telangana/bhuvanagiri  /telangana/bhongir/  301
+/telangana/bhuvanagiri/  /telangana/bhongir/  301
+/telangana/bhongir-bhuvanagiri  /telangana/bhongir/  301
+/telangana/bhongir-bhuvanagiri/  /telangana/bhongir/  301
+/telangana/narayanpet  /telangana/  301
+/telangana/narayanpet/  /telangana/  301
+/telangana/nirmal  /telangana/  301
+/telangana/nirmal/  /telangana/  301
+/telangana/medchal  /telangana/  301
+/telangana/medchal/  /telangana/  301
+/telangana/sangareddy  /telangana/  301
+/telangana/sangareddy/  /telangana/  301
+/telangana/bhadradri-kothagudem  /telangana/kothagudem/  301
+/telangana/bhadradri-kothagudem/  /telangana/kothagudem/  301
+
+# ── 9. Andhra Pradesh Alternate City Spellings & Non-Featured Cities ─────────
+/andhra-pradesh/vizag  /andhra-pradesh/visakhapatnam/  301
+/andhra-pradesh/vizag/  /andhra-pradesh/visakhapatnam/  301
+/andhra-pradesh/rajamahendravaram  /andhra-pradesh/rajahmundry/  301
+/andhra-pradesh/rajamahendravaram/  /andhra-pradesh/rajahmundry/  301
+/andhra-pradesh/amaravati  /andhra-pradesh/vijayawada/  301
+/andhra-pradesh/amaravati/  /andhra-pradesh/vijayawada/  301
+/andhra-pradesh/cuddapah  /andhra-pradesh/kadapa/  301
+/andhra-pradesh/cuddapah/  /andhra-pradesh/kadapa/  301
+/andhra-pradesh/narasaraopet  /andhra-pradesh/  301
+/andhra-pradesh/narasaraopet/  /andhra-pradesh/  301
+/andhra-pradesh/palakollu  /andhra-pradesh/  301
+/andhra-pradesh/palakollu/  /andhra-pradesh/  301
+/andhra-pradesh/tanuku  /andhra-pradesh/  301
+/andhra-pradesh/tanuku/  /andhra-pradesh/  301
+
+# ── 10. Kerala Alternate City Spellings & Non-Featured Cities ────────────────
+/kerala/trivandrum  /kerala/thiruvananthapuram/  301
+/kerala/trivandrum/  /kerala/thiruvananthapuram/  301
+/kerala/cochin  /kerala/kochi/  301
+/kerala/cochin/  /kerala/kochi/  301
+/kerala/calicut  /kerala/kozhikode/  301
+/kerala/calicut/  /kerala/kozhikode/  301
+/kerala/quilon  /kerala/kollam/  301
+/kerala/quilon/  /kerala/kollam/  301
+/kerala/alleppey  /kerala/alappuzha/  301
+/kerala/alleppey/  /kerala/alappuzha/  301
+/kerala/palghat  /kerala/palakkad/  301
+/kerala/palghat/  /kerala/palakkad/  301
+/kerala/cannanoor  /kerala/kannur/  301
+/kerala/cannanoor/  /kerala/kannur/  301
+/kerala/thodupuzha  /kerala/  301
+/kerala/thodupuzha/  /kerala/  301
+/kerala/angamaly  /kerala/  301
+/kerala/angamaly/  /kerala/  301
+/kerala/neyyattinkara  /kerala/  301
+/kerala/neyyattinkara/  /kerala/  301
+/kerala/chalakudy  /kerala/  301
+/kerala/chalakudy/  /kerala/  301
+/kerala/nilambur  /kerala/  301
+/kerala/nilambur/  /kerala/  301
+
+# ── 11. "kamataka" Misspelling Exact City Redirects ──────────────────────────
+/kamataka  /karnataka/  301
+/kamataka/  /karnataka/  301
+/kamataka/bangalore  /karnataka/bangalore/  301
+/kamataka/bangalore/  /karnataka/bangalore/  301
+/kamataka/bengaluru  /karnataka/bangalore/  301
+/kamataka/bengaluru/  /karnataka/bangalore/  301
+/kamataka/mysore  /karnataka/mysore/  301
+/kamataka/mysore/  /karnataka/mysore/  301
+/kamataka/mysuru  /karnataka/mysore/  301
+/kamataka/mysuru/  /karnataka/mysore/  301
+/kamataka/hubli  /karnataka/hubli/  301
+/kamataka/hubli/  /karnataka/hubli/  301
+/kamataka/hubballi  /karnataka/hubli/  301
+/kamataka/hubballi/  /karnataka/hubli/  301
+/kamataka/mangalore  /karnataka/mangalore/  301
+/kamataka/mangalore/  /karnataka/mangalore/  301
+/kamataka/mangaluru  /karnataka/mangalore/  301
+/kamataka/mangaluru/  /karnataka/mangalore/  301
+/kamataka/belgaum  /karnataka/belgaum/  301
+/kamataka/belgaum/  /karnataka/belgaum/  301
+/kamataka/belagavi  /karnataka/belgaum/  301
+/kamataka/belagavi/  /karnataka/belgaum/  301
+/kamataka/gulbarga  /karnataka/gulbarga/  301
+/kamataka/gulbarga/  /karnataka/gulbarga/  301
+/kamataka/kalaburagi  /karnataka/gulbarga/  301
+/kamataka/kalaburagi/  /karnataka/gulbarga/  301
+/kamataka/bellary  /karnataka/bellary/  301
+/kamataka/bellary/  /karnataka/bellary/  301
+/kamataka/ballari  /karnataka/bellary/  301
+/kamataka/ballari/  /karnataka/bellary/  301
+/kamataka/bijapur  /karnataka/bijapur/  301
+/kamataka/bijapur/  /karnataka/bijapur/  301
+/kamataka/vijayapura  /karnataka/bijapur/  301
+/kamataka/vijayapura/  /karnataka/bijapur/  301
+/kamataka/shimoga  /karnataka/shimoga/  301
+/kamataka/shimoga/  /karnataka/shimoga/  301
+/kamataka/shivamogga  /karnataka/shimoga/  301
+/kamataka/shivamogga/  /karnataka/shimoga/  301
+/kamataka/tumkur  /karnataka/tumkur/  301
+/kamataka/tumkur/  /karnataka/tumkur/  301
+/kamataka/tumakuru  /karnataka/tumkur/  301
+/kamataka/tumakuru/  /karnataka/tumkur/  301
+/kamataka/chikkamagaluru  /karnataka/  301
+/kamataka/chikkamagaluru/  /karnataka/  301
+/kamataka/madikeri  /karnataka/  301
+/kamataka/madikeri/  /karnataka/  301
+/kamataka/raichur  /karnataka/raichur/  301
+/kamataka/raichur/  /karnataka/raichur/  301
+/kamataka/bidar  /karnataka/bidar/  301
+/kamataka/bidar/  /karnataka/bidar/  301
+/kamataka/hospet  /karnataka/hospet/  301
+/kamataka/hospet/  /karnataka/hospet/  301
+/kamataka/hassan  /karnataka/hassan/  301
+/kamataka/hassan/  /karnataka/hassan/  301
+/kamataka/gadag  /karnataka/gadag/  301
+/kamataka/gadag/  /karnataka/gadag/  301
+/kamataka/udupi  /karnataka/udupi/  301
+/kamataka/udupi/  /karnataka/udupi/  301
+/kamataka/chitradurga  /karnataka/chitradurga/  301
+/kamataka/chitradurga/  /karnataka/chitradurga/  301
+/kamataka/kolar  /karnataka/kolar/  301
+/kamataka/kolar/  /karnataka/kolar/  301
+/kamataka/mandya  /karnataka/mandya/  301
+/kamataka/mandya/  /karnataka/mandya/  301
+/kamataka/davanagere  /karnataka/davanagere/  301
+/kamataka/davanagere/  /karnataka/davanagere/  301
+
+# ── 12. Legacy HTML Next.js Routes ───────────────────────────────────────────
+/cities/ap/packers-movers-vijayawada.html  /andhra-pradesh/vijayawada/  301
+/cities/ap/packers-movers-visakhapatnam.html  /andhra-pradesh/visakhapatnam/  301
+/cities/ap/packers-movers-kadapa.html  /andhra-pradesh/kadapa/  301
+/cities/ap/packers-movers-kumool.html  /andhra-pradesh/kurnool/  301
+/cities/ap/packers-movers-kurnool.html  /andhra-pradesh/kurnool/  301
+/cities/ap/packers-movers-guntur.html  /andhra-pradesh/guntur/  301
+/cities/ap/packers-movers-nellore.html  /andhra-pradesh/nellore/  301
+/cities/ap/packers-movers-tirupati.html  /andhra-pradesh/tirupati/  301
+/cities/ap/packers-movers-rajahmundry.html  /andhra-pradesh/rajahmundry/  301
+/cities/ap/packers-movers-kakinada.html  /andhra-pradesh/kakinada/  301
+/cities/ap/packers-movers-anantapur.html  /andhra-pradesh/anantapur/  301
+/cities/ap/packers-movers-amaravati.html  /andhra-pradesh/vijayawada/  301
+
+/cities/ka/packers-movers-bengaluru.html  /karnataka/bangalore/  301
+/cities/ka/packers-movers-bangalore.html  /karnataka/bangalore/  301
+/cities/ka/packers-movers-mysuru.html  /karnataka/mysore/  301
+/cities/ka/packers-movers-mysore.html  /karnataka/mysore/  301
+/cities/ka/packers-movers-hubli.html  /karnataka/hubli/  301
+/cities/ka/packers-movers-hubballi.html  /karnataka/hubli/  301
+/cities/ka/packers-movers-mangalore.html  /karnataka/mangalore/  301
+/cities/ka/packers-movers-mangaluru.html  /karnataka/mangalore/  301
+/cities/ka/packers-movers-belgaum.html  /karnataka/belgaum/  301
+/cities/ka/packers-movers-belagavi.html  /karnataka/belgaum/  301
+/cities/ka/packers-movers-gulbarga.html  /karnataka/gulbarga/  301
+/cities/ka/packers-movers-kalaburagi.html  /karnataka/gulbarga/  301
+/cities/ka/packers-movers-bellary.html  /karnataka/bellary/  301
+/cities/ka/packers-movers-ballari.html  /karnataka/bellary/  301
+
+/cities/ts/packers-movers-karimnagar.html  /telangana/karimnagar/  301
+/cities/ts/packers-movers-hyderabad.html  /telangana/hyderabad/  301
+/cities/ts/packers-movers-warangal.html  /telangana/warangal/  301
+/cities/ts/packers-movers-nizamabad.html  /telangana/nizamabad/  301
+/cities/ts/packers-movers-khammam.html  /telangana/khammam/  301
+
+/cities/tn/packers-movers-chennai.html  /tamil-nadu/chennai/  301
+/cities/tn/packers-movers-coimbatore.html  /tamil-nadu/coimbatore/  301
+/cities/tn/packers-movers-madurai.html  /tamil-nadu/madurai/  301
+
+/cities/kl/packers-movers-kochi.html  /kerala/kochi/  301
+/cities/kl/packers-movers-trivandrum.html  /kerala/thiruvananthapuram/  301
+/cities/kl/packers-movers-thiruvananthapuram.html  /kerala/thiruvananthapuram/  301
+/cities/kl/packers-movers-kozhikode.html  /kerala/kozhikode/  301
+
+# ── 13. Legacy "{city}-packers-and-movers" Formats ───────────────────────────
+/kozhikode-packers-and-movers  /kerala/kozhikode/  301
+/kozhikode-packers-and-movers/  /kerala/kozhikode/  301
+/tirupati-packers-and-movers  /andhra-pradesh/tirupati/  301
+/tirupati-packers-and-movers/  /andhra-pradesh/tirupati/  301
+/kakinada-packers-and-movers  /andhra-pradesh/kakinada/  301
+/kakinada-packers-and-movers/  /andhra-pradesh/kakinada/  301
+/hubballi-packers-and-movers  /karnataka/hubli/  301
+/hubballi-packers-and-movers/  /karnataka/hubli/  301
+/hubli-packers-and-movers  /karnataka/hubli/  301
+/hubli-packers-and-movers/  /karnataka/hubli/  301
+/bengaluru-packers-and-movers  /karnataka/bangalore/  301
+/bengaluru-packers-and-movers/  /karnataka/bangalore/  301
+/bangalore-packers-and-movers  /karnataka/bangalore/  301
+/bangalore-packers-and-movers/  /karnataka/bangalore/  301
+/mysuru-packers-and-movers  /karnataka/mysore/  301
+/mysuru-packers-and-movers/  /karnataka/mysore/  301
+/mysore-packers-and-movers  /karnataka/mysore/  301
+/mysore-packers-and-movers/  /karnataka/mysore/  301
+/hyderabad-packers-and-movers  /telangana/hyderabad/  301
+/hyderabad-packers-and-movers/  /telangana/hyderabad/  301
+/chennai-packers-and-movers  /tamil-nadu/chennai/  301
+/chennai-packers-and-movers/  /tamil-nadu/chennai/  301
+
+# ── 14. Legacy "packers-and-movers-{city}" Formats ───────────────────────────
+/packers-and-movers-tiruppur  /tamil-nadu/tiruppur/  301
+/packers-and-movers-tiruppur/  /tamil-nadu/tiruppur/  301
+/packers-and-movers-chennai  /tamil-nadu/chennai/  301
+/packers-and-movers-chennai/  /tamil-nadu/chennai/  301
+/packers-and-movers-kalaburagi  /karnataka/gulbarga/  301
+/packers-and-movers-kalaburagi/  /karnataka/gulbarga/  301
+/packers-and-movers-gulbarga  /karnataka/gulbarga/  301
+/packers-and-movers-gulbarga/  /karnataka/gulbarga/  301
+/packers-and-movers-thanjavur  /tamil-nadu/thanjavur/  301
+/packers-and-movers-thanjavur/  /tamil-nadu/thanjavur/  301
+/packers-and-movers-bengaluru  /karnataka/bangalore/  301
+/packers-and-movers-bengaluru/  /karnataka/bangalore/  301
+/packers-and-movers-bangalore  /karnataka/bangalore/  301
+/packers-and-movers-bangalore/  /karnataka/bangalore/  301
+/packers-and-movers-mysuru  /karnataka/mysore/  301
+/packers-and-movers-mysuru/  /karnataka/mysore/  301
+/packers-and-movers-mysore  /karnataka/mysore/  301
+/packers-and-movers-mysore/  /karnataka/mysore/  301
+/packers-and-movers-hyderabad  /telangana/hyderabad/  301
+/packers-and-movers-hyderabad/  /telangana/hyderabad/  301
+
+# ── 15. Legacy Blog URLs ─────────────────────────────────────────────────────
+/blog/packers-movers-cost-guide.html  /blog/  301
+/blog/packers-movers-cost-guide  /blog/  301
+/blog/packers-movers-cost-guide/  /blog/  301
+/blog/top-packers-and-movers-in-nellore-how-to-choose-the-best-service  /blog/andhra-pradesh/nellore/how-to-choose-reliable-packers-and-movers-in-nellore-trust-guide-and-faqs/  301
+/blog/top-packers-and-movers-in-nellore-how-to-choose-the-best-service/  /blog/andhra-pradesh/nellore/how-to-choose-reliable-packers-and-movers-in-nellore-trust-guide-and-faqs/  301
+/blog/house-shifting-services-near-you-in-nellore-professional-packers-for-local-and-t-relocation  /blog/andhra-pradesh/nellore/packers-and-movers-in-nellore-complete-relocation-services-guide/  301
+/blog/house-shifting-services-near-you-in-nellore-professional-packers-for-local-and-t-relocation/  /blog/andhra-pradesh/nellore/packers-and-movers-in-nellore-complete-relocation-services-guide/  301
+/blog/iba-approved-movers-explained.html  /blog/  301
+/blog/iba-approved-movers-explained  /blog/  301
+/blog/iba-approved-movers-explained/  /blog/  301
+/blog/interstate-moving-checklist  /blog/interstate-moving-guide-south-india/  301
+/blog/interstate-moving-checklist/  /blog/interstate-moving-guide-south-india/  301
+/blog/how-to-choose-packers-movers  /blog/  301
+/blog/how-to-choose-packers-movers/  /blog/  301
+
+# ── 16. Legacy "/packers-movers-{city}/" Structure Redirects ─────────────────
 /packers-movers-visakhapatnam/  /andhra-pradesh/visakhapatnam/  301
 /packers-movers-vijayawada/  /andhra-pradesh/vijayawada/  301
 /packers-movers-guntur/  /andhra-pradesh/guntur/  301
@@ -63,7 +384,7 @@
 /packers-movers-narayanpet/  /telangana/  301
 /packers-movers-bhadradri-kothagudem/  /telangana/kothagudem/  301
 /packers-movers-nirmal/  /telangana/  301
-/packers-movers-bhuvanagiri/  /telangana/  301
+/packers-movers-bhuvanagiri/  /telangana/bhongir/  301
 /packers-movers-chennai/  /tamil-nadu/chennai/  301
 /packers-movers-coimbatore/  /tamil-nadu/coimbatore/  301
 /packers-movers-madurai/  /tamil-nadu/madurai/  301
@@ -125,53 +446,16 @@
 /packers-movers-thodupuzha/  /kerala/  301
 /packers-movers-nilambur/  /kerala/  301
 
-# Safety net: any other unmatched legacy /packers-movers-* URL -> homepage
-# (specific rules above take priority since Cloudflare matches top-to-bottom)
+# ── 17. Wildcard Fallbacks and Safety Nets ──────────────────────────────────
+/kamataka/*  /karnataka/:splat  301
+/apl/*  /api/:splat  301
+/cities/*  /services/  301
 /packers-movers-*  /  301
+/packers-and-movers-*  /  301
 
-# ── Trailing-slash canonicalization (v10.7.6) ──────────────────────────────
-# astro.config.mjs now sets trailingSlash:'always' and every internal link/
-# canonical tag in the codebase was updated to emit the trailing-slash form,
-# so /andhra-pradesh/nellore/ is the one true canonical URL going forward.
-# This net only exists to 301 any *external* / legacy link still pointing at
-# the old non-slash form, so link equity consolidates onto the canonical URL
-# instead of Google seeing both as separate, competing pages.
-#
-# Rules are scoped to known static pages, the 5 state slugs, the 9 service
-# slugs, and /{state}/{city} two-segment paths — deliberately NOT a generic
-# wildcard, so requests for real files like /llms.txt, /robots.txt, or
-# /.well-known/security.txt can never be accidentally caught and redirected.
-/about  /about/  301
-/services  /services/  301
-/vehicle-transport  /vehicle-transport/  301
-/storage-warehousing  /storage-warehousing/  301
-/booking  /booking/  301
-/track  /track/  301
-/franchise  /franchise/  301
-/blog  /blog/  301
-/contact  /contact/  301
-/privacy  /privacy/  301
-/terms  /terms/  301
-
-/andhra-pradesh  /andhra-pradesh/  301
-/telangana  /telangana/  301
-/tamil-nadu  /tamil-nadu/  301
-/karnataka  /karnataka/  301
-/kerala  /kerala/  301
-
-/home-shifting-services  /home-shifting-services/  301
-/office-relocation-services  /office-relocation-services/  301
-/car-transportation  /car-transportation/  301
-/bike-transportation  /bike-transportation/  301
-/international-relocation  /international-relocation/  301
-/local-shifting  /local-shifting/  301
-/intercity-shifting  /intercity-shifting/  301
-/industrial-shifting  /industrial-shifting/  301
-/packing-services  /packing-services/  301
-
+# Trailing slash normalization for dynamic city routes
 /andhra-pradesh/:city  /andhra-pradesh/:city/  301
 /telangana/:city  /telangana/:city/  301
 /tamil-nadu/:city  /tamil-nadu/:city/  301
 /karnataka/:city  /karnataka/:city/  301
 /kerala/:city  /kerala/:city/  301
-

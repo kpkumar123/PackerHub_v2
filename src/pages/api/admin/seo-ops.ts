@@ -55,27 +55,27 @@ export async function GET({ request, url }: { request: Request; url: URL }) {
   const type = validTypes.includes(typeParam || '') ? typeParam! : 'competitor';
   const list = await kv.list({ prefix: `${type}:` });
   const entries = await Promise.all(
-    list.keys.map(async (k) => {
+    list.keys.map(async (k: { name: string }) => {
       const raw = await kv.get(k.name);
       return raw ? JSON.parse(raw) : null;
     })
   );
-  const sorted = entries.filter(Boolean).sort((a, b) => (b.loggedAt || '').localeCompare(a.loggedAt || ''));
+  const sorted = entries.filter(Boolean).sort((a: any, b: any) => (b.loggedAt || '').localeCompare(a.loggedAt || ''));
 
   // Module 48 (forecast): only for type=traffic, only a plain linear trend
   // over the real logged monthly numbers — no synthetic data points, and
   // no forecast at all until 3+ real months exist.
   let forecast = null;
   if (type === 'traffic') {
-    const withMonth = sorted.filter((e) => e.month && typeof e.clicks === 'number').sort((a, b) => a.month.localeCompare(b.month));
+    const withMonth = sorted.filter((e: any) => e.month && typeof e.clicks === 'number').sort((a: any, b: any) => a.month.localeCompare(b.month));
     if (withMonth.length >= 3) {
       const n = withMonth.length;
-      const xs = withMonth.map((_, i) => i);
-      const ys = withMonth.map((e) => e.clicks);
-      const xMean = xs.reduce((a, b) => a + b, 0) / n;
-      const yMean = ys.reduce((a, b) => a + b, 0) / n;
-      const num = xs.reduce((s, x, i) => s + (x - xMean) * (ys[i] - yMean), 0);
-      const den = xs.reduce((s, x) => s + (x - xMean) ** 2, 0);
+      const xs = withMonth.map((_: any, i: number) => i);
+      const ys = withMonth.map((e: any) => e.clicks as number);
+      const xMean = xs.reduce((a: number, b: number) => a + b, 0) / n;
+      const yMean = ys.reduce((a: number, b: number) => a + b, 0) / n;
+      const num = xs.reduce((s: number, x: number, i: number) => s + (x - xMean) * (ys[i] - yMean), 0);
+      const den = xs.reduce((s: number, x: number) => s + (x - xMean) ** 2, 0);
       const slope = den === 0 ? 0 : num / den;
       const intercept = yMean - slope * xMean;
       const nextMonthEstimate = Math.max(0, Math.round(intercept + slope * n));
