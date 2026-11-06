@@ -32,10 +32,12 @@ export interface AllAreasData {
 }
 export interface Props {
   allData: AllAreasData;
+  /** v10.7.38 — exact list to show (13 areas from getFooterLinks). Falls back to the JSON list. */
+  areas?: { name: string; category?: Area['category'] }[];
   citySlug: string;   // must match the "slug" field in the JSON, e.g. "nellore"
   cityName?: string;  // optional override for display name
 }
-const { allData, citySlug, cityName } = Astro.props;
+const { allData, citySlug, cityName, areas: areasOverride } = Astro.props;
 
 // Find the city's area data across all 5 states
 let cityData: CityAreas | undefined;
@@ -68,17 +70,18 @@ const groupMeta: Record<Area['category'], { icon: string; title: string; badgeCl
   },
 };
 
-const grouped = cityData
-  ? groupOrder
-      .map((cat) => ({
-        category: cat,
-        meta: groupMeta[cat],
-        areas: cityData!.areas.filter((a) => a.category === cat),
-      }))
-      .filter((g) => g.areas.length > 0)
-  : [];
+const listAreas: { name: string; category?: Area['category'] }[] = areasOverride ?? cityData?.areas ?? [];
+const otherMeta = { icon: '📍', title: 'More Localities', badgeClass: 'service-areas__pill--other' };
+const grouped = [
+  ...groupOrder.map((cat) => ({
+    category: cat as string,
+    meta: groupMeta[cat],
+    areas: listAreas.filter((a) => a.category === cat),
+  })),
+  { category: 'other', meta: otherMeta, areas: listAreas.filter((a) => !a.category) },
+].filter((g) => g.areas.length > 0);
 ---
-{cityData && (
+{listAreas.length > 0 && (
   <section class="service-areas" aria-labelledby="service-areas-heading">
     <div class="text-center mb-10 reveal">
       <span class="inline-block px-4 py-1.5 rounded-full bg-orange-100 text-brand-orange text-sm font-bold mb-4 uppercase tracking-wide">
@@ -192,6 +195,11 @@ const grouped = cityData
     color: #1e3a8a;
     background: linear-gradient(135deg, #eaf1ff, #dbe8ff);
     border: 1px solid #c6d9ff;
+  }
+  .service-areas__pill--other {
+    color: #374151;
+    background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+    border: 1px solid #d1d5db;
   }
   .service-areas__pill--high-population {
     color: #065f46;

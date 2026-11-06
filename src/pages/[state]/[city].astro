@@ -9,6 +9,8 @@ import cities from '../../data/cities.json';
 import states from '../../data/states.json';
 import { parseFaqText } from '../../utils/parseFaq';
 import ServiceAreas from '../../components/ServiceAreas.astro';
+import LocalAreasFooter from '../../components/LocalAreasFooter.astro';
+import { getFooterLinks } from '../../utils/localAreaLinks';
 import serviceAreasData from '../../data/service-areas/all-100-cities.json';
 import { resolveServiceAreaSlug } from '../../utils/serviceAreaSlug';
 import nearbyTownsData from '../../data/service-areas/also-serving-nearby-towns.json';
@@ -113,7 +115,7 @@ const citySchema = {
 };
 ---
 <BaseLayout
-  title={`Packers & Movers in ${city.name} — PackersHub | Free Quote, 100% Insured`}
+  title={`Best Packers & Movers in ${city.name} - PackersHub | +917731074075`}
   description={`Packers and movers in ${city.name}, ${state?.name}. Household shifting, office relocation, vehicle transport. 100% insured, tracked. Call +91 77310 74075`}
   keywords={`packers movers ${city.name}, best movers ${city.name}, household shifting ${city.name}, packers ${city.name} ${state?.abbr}, relocation ${city.name}, office movers ${city.name}, vehicle transport ${city.name}${city.altName ? `, packers movers ${city.altName}, movers ${city.altName}` : ''}`}
   canonical={`https://www.packershub.in/${city.state}/${city.slug}/`}
@@ -154,14 +156,12 @@ const citySchema = {
           </h1>
 
           {city.lastUpdated && (
-            <>
-              {/* Module 57.4 freshness signal — only renders when a real
-                   content edit date is set in cities.json; never auto-generated,
-                   so this never becomes a fake "always today" date. */}
-              <p class="text-xs text-brand-grey mb-4">
-                Page last updated: {new Date(city.lastUpdated).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
-              </p>
-            </>
+            /* Module 57.4 freshness signal — only renders when a real
+               content edit date is set in cities.json; never auto-generated,
+               so this never becomes a fake "always today" date. */
+            <p class="text-xs text-brand-grey mb-4">
+              Page last updated: {new Date(city.lastUpdated).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </p>
           )}
 
           <p class="text-lg text-brand-grey mb-6 leading-relaxed">
@@ -332,7 +332,7 @@ const citySchema = {
   <!-- LOCALITY-LEVEL SERVICE AREAS -->
   <section class="py-16 bg-white">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <ServiceAreas allData={serviceAreasData} citySlug={serviceAreaSlug} cityName={city.name} />
+      <ServiceAreas allData={serviceAreasData} citySlug={serviceAreaSlug} cityName={city.name} areas={getFooterLinks(city).areas} />
     </div>
   </section>
 
@@ -396,7 +396,7 @@ const citySchema = {
     <section class="py-20 bg-white" aria-labelledby={secId}>
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <!-- Section Header -->
+        {/* Section Header */}
         <div class="text-center mb-10">
           <span class="inline-block px-4 py-1.5 rounded-full bg-orange-100 text-orange-700 text-sm font-bold mb-4 uppercase tracking-wide">
             Intercity &amp; Interstate Moves
@@ -409,7 +409,7 @@ const citySchema = {
           </p>
         </div>
 
-        <!-- Tab Navigation -->
+        {/* Tab Navigation */}
         <div class="flex gap-2 justify-center mb-8 flex-wrap">
           <button
             onclick="document.getElementById('panel-within').classList.remove('hidden');document.getElementById('panel-inter').classList.add('hidden');this.className='px-5 py-2.5 rounded-full text-sm font-bold border-2 border-brand-orange bg-brand-orange text-white transition-all';document.getElementById('btn-inter').className='px-5 py-2.5 rounded-full text-sm font-bold border-2 border-gray-200 bg-white text-brand-grey hover:border-brand-orange hover:text-brand-orange transition-all';"
@@ -426,7 +426,7 @@ const citySchema = {
           </button>
         </div>
 
-        <!-- Within State Panel -->
+        {/* Within State Panel */}
         <div id="panel-within">
           <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mb-8">
             {withinState.map((route: string) => {
@@ -448,7 +448,7 @@ const citySchema = {
           </div>
         </div>
 
-        <!-- Interstate Panel -->
+        {/* Interstate Panel */}
         <div id="panel-inter" class="hidden">
           <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mb-8">
             {interstate.map((route: string) => {
@@ -564,5 +564,8 @@ const citySchema = {
 
   <QuoteForm />
   <FAQ city={city.name} localFaqs={localFaqs} />
+
+  <!-- DYNAMIC INTERNAL LOCAL FOOTER — max 15 micro-location links for THIS city only -->
+  <LocalAreasFooter city={{ ...city, stateName: state?.name }} />
 
 </BaseLayout>

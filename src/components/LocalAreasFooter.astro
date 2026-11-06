@@ -1,0 +1,122 @@
+---
+// src/components/LocalAreasFooter.astro  (PackersHub v10.7.37-compatible)
+// Dynamic Internal Local Footer — renders ONLY the (max) 15 micro-location
+// links of the CURRENT city. Used at the bottom of src/pages/[state]/[city].astro
+// only — never on Home or in the global Footer.
+import { getFooterLinks } from '../utils/localAreaLinks';
+
+interface Props {
+  city: { slug: string; name: string; state: string; stateName?: string };
+  whatsapp?: string; // digits, country code first
+}
+const { city, whatsapp = '917731074075' } = Astro.props;
+const f = getFooterLinks(city);
+const areaLinks = [...f.areas, ...f.extra];
+const townLinks = f.towns;
+const count = f.all.length;
+const wa = `https://wa.me/${whatsapp}?text=${encodeURIComponent(
+  `Hi PackersHub, I need packers and movers in ${city.name}. Please share a free quote.`
+)}`;
+const uid = `la-${city.slug}`;
+---
+{count > 0 && (
+  <section class="la" aria-labelledby={`${uid}-t`}>
+    <div class="la__wrap">
+      <details class="la__box" data-local-areas>
+        <summary class="la__head" id={`${uid}-t`}>
+          <span class="la__headtext">
+            <span class="la__title">Popular Areas &amp; Nearby Towns in {city.name}</span>
+            <span class="la__sub">{count} localities and nearby towns{city.stateName ? ` · ${city.stateName}` : ''}</span>
+          </span>
+          <span class="la__toggle" aria-hidden="true">
+            <span>View Popular Areas</span>
+            <svg width="18" height="18" viewBox="0 0 20 20"><path d="M5 7.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </summary>
+
+        <nav class="la__body" aria-label={`Packers and movers areas in ${city.name}`}>
+          {areaLinks.length > 0 && (
+            <>
+              <h3 class="la__group">Popular Areas in {city.name}</h3>
+              <ul class="la__grid">
+                {areaLinks.map((a) => (
+                  <li>
+                    <a class="la__link" href={a.href} data-astro-prefetch="false"
+                       title={`Packers and Movers in ${a.name}, ${city.name}`}>
+                      <span class="la__pin" aria-hidden="true"></span>
+                      <span>Packers &amp; Movers in {a.name}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+          {townLinks.length > 0 && (
+            <>
+              <h3 class="la__group">Also Serving Nearby Towns</h3>
+              <ul class="la__grid">
+                {townLinks.map((a) => (
+                  <li>
+                    <a class="la__link" href={a.href} data-astro-prefetch="false"
+                       title={`Packers and Movers in ${a.name}, near ${city.name}`}>
+                      <span class="la__pin" aria-hidden="true"></span>
+                      <span>Packers &amp; Movers in {a.name}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+          <div class="la__cta">
+            <span>Moving within {city.name}? Get a free assessment — no hidden charges.</span>
+            <a class="la__btn" href={wa} rel="noopener" target="_blank">Get Quote on WhatsApp</a>
+          </div>
+        </nav>
+      </details>
+    </div>
+  </section>
+)}
+
+<style>
+  .la {
+    --la-dark: var(--color-brand-dark, #0D1117);
+    --la-orange: var(--color-brand-orange, #E8510A);
+    --la-gold: var(--color-brand-gold, #C9961F);
+    background: linear-gradient(135deg, var(--la-dark) 0%, #111827 55%, var(--la-dark) 100%);
+    color: #fff;
+    border-top: 3px solid var(--la-orange);
+  }
+  .la__wrap { max-width: 80rem; margin: 0 auto; padding: 1.5rem 1rem; }
+  .la__box { border: 1px solid rgba(255,255,255,.12); border-radius: 1.25rem; background: rgba(255,255,255,.04); overflow: hidden; }
+  .la__head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.1rem; min-height: 3.5rem; cursor: pointer; list-style: none; }
+  .la__head::-webkit-details-marker { display: none; }
+  .la__head:focus-visible { outline: 2px solid var(--la-gold); outline-offset: -4px; border-radius: 1.25rem; }
+  .la__headtext { display: flex; flex-direction: column; gap: .15rem; min-width: 0; }
+  .la__title { font-family: var(--font-display, system-ui, sans-serif); font-size: 1.1rem; font-weight: 800; line-height: 1.25; }
+  .la__sub { font-size: .8rem; color: rgba(255,255,255,.65); line-height: 1.3; }
+  .la__toggle { flex: none; display: inline-flex; align-items: center; gap: .4rem; padding: .5rem .85rem; border-radius: 999px; background: var(--la-orange); font-size: .8rem; font-weight: 700; white-space: nowrap; }
+  .la__toggle svg { transition: transform .25s ease; }
+  .la__box[open] .la__toggle svg { transform: rotate(180deg); }
+  .la__body { padding: 0 1.1rem 1.1rem; border-top: 1px solid rgba(255,255,255,.1); }
+  .la__group { margin: 1.1rem 0 0; font-family: var(--font-display, system-ui, sans-serif); font-size: .85rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--la-gold); }
+  .la__grid { list-style: none; margin: 0; padding: .75rem 0 .5rem; display: grid; grid-template-columns: 1fr; gap: .5rem; }
+  .la__link { display: flex; align-items: center; gap: .6rem; min-height: 2.75rem; padding: .55rem .8rem; border-radius: .7rem; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.07); color: rgba(255,255,255,.92); text-decoration: none; font-size: .9rem; line-height: 1.3; transition: background .2s ease, border-color .2s ease; }
+  .la__link:hover, .la__link:focus-visible { background: rgba(232,81,10,.14); border-color: var(--la-orange); color: #fff; }
+  .la__link:focus-visible { outline: 2px solid var(--la-gold); outline-offset: 2px; }
+  .la__pin { flex: none; width: .95rem; height: .95rem; background: var(--la-orange);
+    -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z'/></svg>") center/contain no-repeat;
+            mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z'/></svg>") center/contain no-repeat; }
+  .la__cta { margin-top: .75rem; padding: .9rem 1rem; border-radius: .85rem; background: rgba(255,255,255,.06); display: flex; flex-direction: column; gap: .7rem; font-size: .9rem; color: rgba(255,255,255,.85); }
+  .la__btn { align-self: flex-start; display: inline-flex; align-items: center; min-height: 2.75rem; padding: .65rem 1.1rem; border-radius: .7rem; background: var(--la-orange); color: #fff; font-weight: 800; font-size: .9rem; text-decoration: none; }
+  .la__btn:hover { filter: brightness(1.08); }
+  .la__btn:focus-visible { outline: 2px solid var(--la-gold); outline-offset: 2px; }
+  @media (min-width: 640px) { .la__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 768px) {
+    .la__wrap { padding: 2rem 1.5rem; }
+    .la__grid { grid-template-columns: repeat(3, 1fr); gap: .6rem; }
+    .la__head { padding: 1.25rem 1.5rem; }
+    .la__body { padding: 0 1.5rem 1.5rem; }
+    .la__cta { flex-direction: row; align-items: center; justify-content: space-between; }
+  }
+  @media (prefers-reduced-motion: reduce) { .la__toggle svg, .la__link { transition: none; } }
+</style>

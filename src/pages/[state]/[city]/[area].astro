@@ -1,0 +1,106 @@
+---
+// src/pages/[state]/[city]/[area].astro
+// On-demand page (prerender = false), same pattern as src/pages/driver/[id].astro:
+// the 2,500 area/town pages are rendered when visited, so they add NOTHING to the
+// build output size or build time. Facts come only from the site's own data; rates,
+// ETAs and customer-count claims are deliberately not generated.
+// Pages are noindex until src/data/service-areas/local-footer.json has
+// "areaPagesIndexable": true (do that only after each page has unique, verified content).
+export const prerender = false;
+
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import QuoteForm from '../../../components/QuoteForm.astro';
+import cities from '../../../data/cities.json';
+import states from '../../../data/states.json';
+import config from '../../../data/service-areas/local-footer.json';
+import { getFooterLinks } from '../../../utils/localAreaLinks';
+
+const { state: stateSlug, city: citySlug, area: areaSlug } = Astro.params;
+const city = cities.find((c) => c.slug === citySlug && c.state === stateSlug);
+if (!city) return new Response('Not found', { status: 404 });
+
+const links = getFooterLinks(city).all;
+const area = links.find((l) => l.slug === areaSlug);
+if (!area) return Astro.redirect(`/${city.state}/${city.slug}/`, 302);
+
+const state = states.find((s) => s.slug === city.state);
+const siblings = links.filter((l) => l.slug !== area.slug);
+const url = `https://www.packershub.in/${city.state}/${city.slug}/${area.slug}/`;
+const kind =
+  area.kind === 'town' ? `a town near ${city.name}`
+  : area.category === 'affluent' ? 'a premium residential locality'
+  : area.category === 'commercial' ? 'a commercial and market area'
+  : area.category === 'high-population' ? 'a densely populated residential area'
+  : 'a locality';
+const title = `Packers & Movers in ${area.name}, ${city.name} — PackersHub | Free Quote`;
+const description = `Packers and movers for ${area.name}, ${city.name}, ${state?.name}. Household shifting, office relocation and vehicle transport. 100% insured. Call +91 77310 74075`;
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={url}
+  noindex={!config.areaPagesIndexable}
+  cityName={city.name}
+  stateName={state?.name}
+  geoRegion={`IN-${state?.abbr}`}
+  geoPlace={city.name}
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: state?.name ?? city.state, url: `/${city.state}/` },
+    { name: city.name, url: `/${city.state}/${city.slug}/` },
+    { name: area.name, url: `/${city.state}/${city.slug}/${area.slug}/` },
+  ]}
+>
+  <section class="relative overflow-hidden hero-bg pt-10 pb-16 lg:pt-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav aria-label="Breadcrumb" class="mb-6">
+        <ol class="flex flex-wrap items-center gap-2 text-sm text-brand-grey" role="list">
+          <li><a href="/" class="hover:text-brand-orange transition-colors">Home</a></li>
+          <li aria-hidden="true">/</li>
+          <li><a href={`/${city.state}/`} class="hover:text-brand-orange transition-colors">{state?.name}</a></li>
+          <li aria-hidden="true">/</li>
+          <li><a href={`/${city.state}/${city.slug}/`} class="hover:text-brand-orange transition-colors">{city.name}</a></li>
+          <li aria-hidden="true">/</li>
+          <li aria-current="page" class="font-semibold text-brand-dark">{area.name}</li>
+        </ol>
+      </nav>
+
+      <h1 class="font-display font-extrabold text-3xl lg:text-5xl text-brand-dark leading-tight mb-5">
+        Packers &amp; Movers in {area.name}, {city.name}
+      </h1>
+      <p class="text-lg text-brand-grey leading-relaxed mb-4">
+        {area.name} is {kind}{area.kind === 'town' ? '' : ` in ${city.name}`}, {state?.name}. PackersHub handles packing, loading,
+        transport and unloading for household shifting, office relocation and vehicle transport
+        from and to {area.name}.
+      </p>
+      <p class="text-brand-grey leading-relaxed mb-8">
+        Share your move details for a free home assessment — we don't publish fixed rates because
+        the price depends on your inventory, floor, distance and access.
+      </p>
+
+      <div class="flex flex-wrap gap-3">
+        <a href="tel:+917731074075" class="inline-flex items-center min-h-12 px-6 rounded-xl bg-brand-orange text-white font-bold shadow-cta">Call +91 77310 74075</a>
+        <a href={`/${city.state}/${city.slug}/`} class="inline-flex items-center min-h-12 px-6 rounded-xl border border-gray-200 bg-white text-brand-dark font-bold">All of {city.name}</a>
+      </div>
+    </div>
+  </section>
+
+  {siblings.length > 0 && (
+    <section class="py-14 bg-white" aria-labelledby="more-areas">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 id="more-areas" class="font-display font-extrabold text-2xl text-brand-dark mb-6">More areas &amp; nearby towns around {city.name}</h2>
+        <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {siblings.map((s) => (
+            <li>
+              <a href={s.href} data-astro-prefetch="false" class="block p-3 rounded-xl border border-gray-100 bg-gray-50 text-sm font-semibold text-brand-dark hover:border-brand-orange transition-colors">
+                Packers &amp; Movers in {s.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <QuoteForm />
+</BaseLayout>
