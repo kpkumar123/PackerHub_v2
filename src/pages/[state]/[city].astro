@@ -43,6 +43,30 @@ const nearbyTowns: string[] = (nearbyTownsData as any).cities?.[city.slug] || []
 const popularRoutes: string[] = city.popular_routes || [];
 const contentIntro: string = city.content_intro || '';
 
+const stateNameMap: Record<string, string> = {
+  'andhra-pradesh': 'Andhra Pradesh',
+  'telangana': 'Telangana',
+  'tamil-nadu': 'Tamil Nadu',
+  'karnataka': 'Karnataka',
+  'kerala': 'Kerala',
+};
+const cityStateLookup: Record<string, string> = {};
+(cities as Array<{ name: string; state: string }>).forEach((c) => {
+  cityStateLookup[c.name] = c.state;
+});
+const withinState = popularRoutes.filter((r: string) => {
+  const dest = r.split(' to ')[1]?.trim();
+  return Boolean(dest && cityStateLookup[dest] === city.state);
+});
+const interstate = popularRoutes.filter((r: string) => {
+  const dest = r.split(' to ')[1]?.trim();
+  return Boolean(dest && cityStateLookup[dest] && cityStateLookup[dest] !== city.state);
+});
+const routesStateName = stateNameMap[city.state] || city.state;
+const routesSecId = `routes-${city.slug}`;
+const hasRoutes = popularRoutes.length > 0;
+const lastUpdated = (city as any).lastUpdated as string | undefined;
+
 // v10.6.5 — city.faq_text existed in cities.json for all 100 cities but
 // was never read anywhere in the codebase; every city page rendered the
 // exact same templated FAQPage schema below. Parsed here into real
@@ -124,7 +148,7 @@ const citySchema = {
   stateName={state?.name}
   geoRegion={`IN-${state?.abbr}`}
   geoPlace={city.name}
-  modifiedDate={city.lastUpdated}
+  modifiedDate={lastUpdated}
 >
 
   <!-- HERO -->
@@ -155,12 +179,12 @@ const citySchema = {
             Best Packers &amp; Movers<br/>in <span class="text-gradient">{city.name}</span>{city.altName && <span class="text-2xl sm:text-3xl font-semibold text-brand-grey"> ({city.altName})</span>}
           </h1>
 
-          {city.lastUpdated && (
+          {lastUpdated && (
             /* Module 57.4 freshness signal — only renders when a real
                content edit date is set in cities.json; never auto-generated,
                so this never becomes a fake "always today" date. */
             <p class="text-xs text-brand-grey mb-4">
-              Page last updated: {new Date(city.lastUpdated).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
+              Page last updated: {new Date(lastUpdated).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
             </p>
           )}
 
@@ -332,7 +356,7 @@ const citySchema = {
   <!-- LOCALITY-LEVEL SERVICE AREAS -->
   <section class="py-16 bg-white">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <ServiceAreas allData={serviceAreasData} citySlug={serviceAreaSlug} cityName={city.name} areas={getFooterLinks(city).areas} />
+      <ServiceAreas allData={serviceAreasData as any} citySlug={serviceAreaSlug} cityName={city.name} areas={getFooterLinks(city).areas} />
     </div>
   </section>
 
@@ -371,29 +395,8 @@ const citySchema = {
   <!-- ===========================================================
        POPULAR ROUTES — DETAILED SECTION (v10.2.3)
        =========================================================== -->
-  {(() => {
-    if (!popularRoutes || popularRoutes.length === 0) return null;
-    const stateNameMap: Record<string, string> = {
-      'andhra-pradesh': 'Andhra Pradesh',
-      'telangana': 'Telangana',
-      'tamil-nadu': 'Tamil Nadu',
-      'karnataka': 'Karnataka',
-      'kerala': 'Kerala',
-    };
-    const cityStateLookup: Record<string, string> = {};
-    (cities as any[]).forEach((c: any) => { cityStateLookup[c.name] = c.state; });
-    const withinState = popularRoutes.filter((r: string) => {
-      const dest = r.split(' to ')[1]?.trim();
-      return dest && cityStateLookup[dest] === city.state;
-    });
-    const interstate = popularRoutes.filter((r: string) => {
-      const dest = r.split(' to ')[1]?.trim();
-      return dest && cityStateLookup[dest] && cityStateLookup[dest] !== city.state;
-    });
-    const stateName = stateNameMap[city.state] || city.state;
-    const secId = `routes-${city.slug}`;
-    return (
-    <section class="py-20 bg-white" aria-labelledby={secId}>
+  {hasRoutes && (
+    <section class="py-20 bg-white" aria-labelledby={routesSecId}>
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section Header */}
@@ -401,26 +404,27 @@ const citySchema = {
           <span class="inline-block px-4 py-1.5 rounded-full bg-orange-100 text-orange-700 text-sm font-bold mb-4 uppercase tracking-wide">
             Intercity &amp; Interstate Moves
           </span>
-          <h2 id={secId} class="font-display font-extrabold text-3xl lg:text-4xl text-brand-dark mb-4">
+          <h2 id={routesSecId} class="font-display font-extrabold text-3xl lg:text-4xl text-brand-dark mb-4">
             Popular Relocation Routes from {city.name}
           </h2>
           <p class="text-brand-grey text-lg max-w-2xl mx-auto">
-            PackersHub serves all major cities across South India from {city.name} — same transparent pricing whether you move within {stateName} or across state lines.
+            PackersHub serves all major cities across South India from {city.name} — same transparent pricing whether you move within {routesStateName} or across state lines.
           </p>
         </div>
 
         {/* Tab Navigation */}
         <div class="flex gap-2 justify-center mb-8 flex-wrap">
           <button
-            onclick="document.getElementById('panel-within').classList.remove('hidden');document.getElementById('panel-inter').classList.add('hidden');this.className='px-5 py-2.5 rounded-full text-sm font-bold border-2 border-brand-orange bg-brand-orange text-white transition-all';document.getElementById('btn-inter').className='px-5 py-2.5 rounded-full text-sm font-bold border-2 border-gray-200 bg-white text-brand-grey hover:border-brand-orange hover:text-brand-orange transition-all';"
-            class="px-5 py-2.5 rounded-full text-sm font-bold border-2 border-brand-orange bg-brand-orange text-white transition-all"
+            id="btn-within"
+            type="button"
+            class="px-5 py-2.5 rounded-full text-sm font-bold border-2 border-brand-orange bg-brand-orange text-white transition-all cursor-pointer"
           >
-            📍 Within {stateName} ({withinState.length})
+            📍 Within {routesStateName} ({withinState.length})
           </button>
           <button
             id="btn-inter"
-            onclick="document.getElementById('panel-inter').classList.remove('hidden');document.getElementById('panel-within').classList.add('hidden');this.className='px-5 py-2.5 rounded-full text-sm font-bold border-2 border-blue-500 bg-blue-500 text-white transition-all';document.querySelector('[onclick*=panel-within]').className='px-5 py-2.5 rounded-full text-sm font-bold border-2 border-gray-200 bg-white text-brand-grey hover:border-brand-orange hover:text-brand-orange transition-all';"
-            class="px-5 py-2.5 rounded-full text-sm font-bold border-2 border-gray-200 bg-white text-brand-grey hover:border-brand-orange hover:text-brand-orange transition-all"
+            type="button"
+            class="px-5 py-2.5 rounded-full text-sm font-bold border-2 border-gray-200 bg-white text-brand-grey hover:border-brand-orange hover:text-brand-orange transition-all cursor-pointer"
           >
             🚛 Interstate ({interstate.length})
           </button>
@@ -477,9 +481,36 @@ const citySchema = {
           Don't see your route? <a href="tel:+917731074075" class="text-brand-orange font-bold hover:underline">Call +91 77310 74075</a> with your origin &amp; destination — we cover any city in South India. All moves include packing, loading, transport, unloading &amp; 100% transit insurance.
         </p>
       </div>
+
+      <script is:inline>
+        (function() {
+          function setupRouteTabs() {
+            var btnWithin = document.getElementById('btn-within');
+            var btnInter = document.getElementById('btn-inter');
+            var panelWithin = document.getElementById('panel-within');
+            var panelInter = document.getElementById('panel-inter');
+            if (!btnWithin || !btnInter || !panelWithin || !panelInter) return;
+
+            btnWithin.onclick = function() {
+              panelWithin.classList.remove('hidden');
+              panelInter.classList.add('hidden');
+              btnWithin.className = 'px-5 py-2.5 rounded-full text-sm font-bold border-2 border-brand-orange bg-brand-orange text-white transition-all cursor-pointer';
+              btnInter.className = 'px-5 py-2.5 rounded-full text-sm font-bold border-2 border-gray-200 bg-white text-brand-grey hover:border-brand-orange hover:text-brand-orange transition-all cursor-pointer';
+            };
+
+            btnInter.onclick = function() {
+              panelInter.classList.remove('hidden');
+              panelWithin.classList.add('hidden');
+              btnInter.className = 'px-5 py-2.5 rounded-full text-sm font-bold border-2 border-blue-500 bg-blue-500 text-white transition-all cursor-pointer';
+              btnWithin.className = 'px-5 py-2.5 rounded-full text-sm font-bold border-2 border-gray-200 bg-white text-brand-grey hover:border-brand-orange hover:text-brand-orange transition-all cursor-pointer';
+            };
+          }
+          setupRouteTabs();
+          document.addEventListener('astro:page-load', setupRouteTabs);
+        })();
+      </script>
     </section>
-    );
-  })()}
+  )}
 
 <!-- ===========================================================
        100% SAFE DELIVERY GUARANTEE — DETAILED SECTION
