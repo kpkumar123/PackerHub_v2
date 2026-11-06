@@ -167,6 +167,8 @@ export default defineConfig({
         'astro/app/manifest',
         'astro:assets',
         'astro:content',
+        'astro:transitions',
+        'astro/virtual-modules/transitions',
         'astro/assets/services/noop',
         'astro/assets/services/sharp',
       ]
@@ -178,6 +180,8 @@ export default defineConfig({
           'astro/app/manifest',
           'astro:assets',
           'astro:content',
+          'astro:transitions',
+          'astro/virtual-modules/transitions',
           'astro/assets/services/noop',
           'astro/assets/services/sharp',
         ]
